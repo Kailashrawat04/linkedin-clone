@@ -41,11 +41,10 @@ const userSchema = new mongoose.Schema(
 );
 
 // Hash the password automatically before saving, if it changed
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
 
 // Helper to check a login attempt's password against the hashed one
